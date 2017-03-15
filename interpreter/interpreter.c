@@ -31,6 +31,7 @@ void initFuncs(FunPtr *f, uint32_t cnt) {
     f[0x70] = gtFunction;
     f[0x80] = geFunction;
     f[0x90] = eqFunction;
+    f[0xa0] = iteFunction;
 }
 
 void initRegs(Reg *r, uint32_t cnt)
