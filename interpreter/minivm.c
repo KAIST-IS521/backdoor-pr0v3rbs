@@ -106,8 +106,14 @@ void iteFunction(struct VMContext* ctx, const uint32_t instr)
     else if (ctx->r[r0].value == 0)
     {
         ctx->jmp_flag = true;
-        ctx->jmp_value = EXTRACT_B3(instr);;
+        ctx->jmp_value = EXTRACT_B3(instr);
     }
+}
+
+void jumpFunction(struct VMContext* ctx, const uint32_t instr)
+{
+    ctx->jmp_flag = true;
+    ctx->jmp_value = EXTRACT_B1(instr);
 }
 
 
