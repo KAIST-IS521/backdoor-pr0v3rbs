@@ -26,6 +26,8 @@ void initFuncs(FunPtr *f, uint32_t cnt) {
     f[0x20] = storeFunction;
     f[0x30] = moveFunction;
     f[0x40] = putiFunction;
+    f[0x50] = addFunction;
+    f[0x60] = subFunction;
 }
 
 void initRegs(Reg *r, uint32_t cnt)
