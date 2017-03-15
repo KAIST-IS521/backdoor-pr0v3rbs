@@ -24,6 +24,8 @@ void initFuncs(FunPtr *f, uint32_t cnt) {
     f[0x00] = haltFunction;
     f[0x10] = loadFunction;
     f[0x20] = storeFunction;
+    f[0x30] = moveFunction;
+    f[0x40] = putiFunction;
 }
 
 void initRegs(Reg *r, uint32_t cnt)

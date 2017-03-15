@@ -31,6 +31,20 @@ void storeFunction(struct VMContext* ctx, const uint32_t instr)
 }
 
 
+void moveFunction(struct VMContext* ctx, const uint32_t instr)
+{
+    const uint8_t r0 = EXTRACT_B1(instr);
+    const uint8_t r1 = EXTRACT_B2(instr);
+    ctx->r[r0].value = ctx->r[r1].value;
+}
+
+void putiFunction(struct VMContext* ctx, const uint32_t instr)
+{
+    const uint8_t r0 = EXTRACT_B1(instr);
+    const uint8_t imm = EXTRACT_B2(instr);
+    ctx->r[r0].value = (uint32_t)imm;
+}
+
 // Defers decoding of register args to the called function.
 // dispatch :: VMContext -> uint32_t -> Effect()
 void dispatch(struct VMContext* ctx, const uint32_t instr) {
