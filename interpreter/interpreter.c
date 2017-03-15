@@ -47,8 +47,10 @@ int main(int argc, char** argv) {
     VMContext vm;
     Reg r[NUM_REGS];
     FunPtr f[NUM_FUNCS];
-    FILE* bytecode;
+    FILE* fd;
     uint32_t* pc;
+    fpos_t filePos;
+    size_t fileSize;
 
     // There should be at least one argument.
     if (argc < 2) usageExit();
@@ -61,18 +63,38 @@ int main(int argc, char** argv) {
     initVMContext(&vm, NUM_REGS, NUM_FUNCS, r, f);
 
     // Load bytecode file
-    bytecode = fopen(argv[1], "rb");
-    if (bytecode == NULL) {
+    fd = fopen(argv[1], "rb");
+    if (fd == NULL) {
         perror("fopen");
         return 1;
     }
 
+    fseek(fd, 0, SEEK_END);
+    fgetpos(fd, &filePos);
+    fileSize = filePos.__pos;
+    pc = (uint32_t*)malloc(fileSize);
+    vm.code = pc;
+    vm.instr_num = fileSize / 4;
+
+    fseek(fd, 0, SEEK_SET);
+    fread(pc, 4, vm.instr_num, fd);
+
     while (vm.is_running) {
         // TODO: Read 4-byte bytecode, and set the pc accordingly
         stepVMContext(&vm, &pc);
+        if (vm.jmp_flag)
+        {
+            if (vm.jmp_value >= vm.instr_num)
+            {
+                printf("illegal instruction pointer, in instuction(%ld)\n", (long unsigned int)(pc - vm.code) - 1);
+                exit(-1);
+            }
+            vm.jmp_flag = false;
+            pc = vm.code + vm.jmp_value;
+        }
     }
 
-    fclose(bytecode);
+    fclose(fd);
 
     // Zero indicates normal termination.
     return 0;

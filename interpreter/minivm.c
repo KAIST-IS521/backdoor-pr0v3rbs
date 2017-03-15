@@ -8,9 +8,6 @@
 #include <stdlib.h>
 #include "minivm.h"
 
-bool g_ite_flag = false;
-uint8_t g_ite_value = 0;
-
 //---------------------------------------------------------
 // FUNCTION IMPLEMENTATIONS:
 void haltFunction(struct VMContext* ctx, __attribute__((unused)) const uint32_t instr)
@@ -100,20 +97,19 @@ void eqFunction(struct VMContext* ctx, const uint32_t instr)
 void iteFunction(struct VMContext* ctx, const uint32_t instr)
 {
     const uint8_t r0 = EXTRACT_B1(instr);
-    const uint8_t imm0 = EXTRACT_B2(instr);
-    const uint8_t imm1 = EXTRACT_B3(instr);
 
     if (ctx->r[r0].value > 0)
     {
-        g_ite_flag = true;
-        g_ite_value = imm0;
+        ctx->jmp_flag = true;
+        ctx->jmp_value = EXTRACT_B2(instr);
     }
     else if (ctx->r[r0].value == 0)
     {
-        g_ite_flag = true;
-        g_ite_value = imm1;
+        ctx->jmp_flag = true;
+        ctx->jmp_value = EXTRACT_B3(instr);;
     }
 }
+
 
 // Defers decoding of register args to the called function.
 // dispatch :: VMContext -> uint32_t -> Effect()
@@ -130,7 +126,11 @@ void initVMContext(struct VMContext* ctx, const uint32_t numRegs, const uint32_t
     ctx->numFuns    = numFuns;
     ctx->r          = registers;
     ctx->funtable   = funtable;
+    ctx->instr_num  = 0;
+    ctx->code       = NULL;
     ctx->is_running = true;
+    ctx->jmp_flag   = false;
+    ctx->jmp_value  = 0;
     ctx->heap       = NULL;
 }
 
@@ -142,11 +142,6 @@ void stepVMContext(struct VMContext* ctx, uint32_t** pc) {
     uint32_t instr = **pc;
 
     // Dispatch to an opcode-handler.
-    if (g_ite_flag)
-    {
-        *(uint8_t*)(&instr) = g_ite_value;
-        g_ite_flag = false;
-    }
     dispatch(ctx, instr);
 
     // Increment to next instruction.

@@ -38,7 +38,11 @@ typedef struct VMContext {
     uint32_t numFuns;
     Reg* r;           // Ptr to register array.
     FunPtr* funtable; // Ptr to a funptr table.
+    uint32_t* code;
+    uint32_t instr_num;
     bool is_running;  // halt check value.
+    bool jmp_flag;
+    uint8_t jmp_value;
     void* heap;       // data section base address.
 } VMContext;
 
