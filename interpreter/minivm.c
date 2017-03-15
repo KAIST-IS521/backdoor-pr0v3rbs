@@ -4,6 +4,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include "minivm.h"
@@ -116,6 +117,28 @@ void jumpFunction(struct VMContext* ctx, const uint32_t instr)
     ctx->jmp_value = EXTRACT_B1(instr);
 }
 
+void putsFunction(struct VMContext* ctx, const uint32_t instr)
+{
+    const uint8_t r0 = EXTRACT_B1(instr);
+    printf("%s", (char*)(ctx->heap + ctx->r[r0].value));
+}
+
+void getsFunction(struct VMContext* ctx, const uint32_t instr)
+{
+    const uint8_t r0 = EXTRACT_B1(instr);
+    char* str = (char*)(ctx->heap + ctx->r[r0].value);
+    while (true)
+    {
+        *str = getc(stdin);
+        if (*str == '\n')
+        {
+            *(str) = '\0';
+            break;
+        }
+        str++;
+    }
+}
+
 
 // Defers decoding of register args to the called function.
 // dispatch :: VMContext -> uint32_t -> Effect()
@@ -137,7 +160,7 @@ void initVMContext(struct VMContext* ctx, const uint32_t numRegs, const uint32_t
     ctx->is_running = true;
     ctx->jmp_flag   = false;
     ctx->jmp_value  = 0;
-    ctx->heap       = NULL;
+    ctx->heap       = malloc(8192);
 }
 
 
