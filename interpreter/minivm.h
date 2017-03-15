@@ -68,6 +68,9 @@ void moveFunction(struct VMContext* ctx, const uint32_t instr);
 void putiFunction(struct VMContext* ctx, const uint32_t instr);
 void addFunction(struct VMContext* ctx, const uint32_t instr);
 void subFunction(struct VMContext* ctx, const uint32_t instr);
+void gtFunction(struct VMContext* ctx, const uint32_t instr);
+void geFunction(struct VMContext* ctx, const uint32_t instr);
+void eqFunction(struct VMContext* ctx, const uint32_t instr);
 
 // Selects and executes an opcode function from the function pointer table.
 // Passes the entire bytecode instruction as the argument.

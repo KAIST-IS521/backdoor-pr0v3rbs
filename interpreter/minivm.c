@@ -61,6 +61,39 @@ void subFunction(struct VMContext* ctx, const uint32_t instr)
     ctx->r[r0].value = ctx->r[r1].value - ctx->r[r2].value;
 }
 
+void gtFunction(struct VMContext* ctx, const uint32_t instr)
+{
+    const uint8_t r0 = EXTRACT_B1(instr);
+    const uint8_t r1 = EXTRACT_B2(instr);
+    const uint8_t r2 = EXTRACT_B3(instr);
+    if (ctx->r[r1].value > ctx->r[r2].value)
+        ctx->r[r0].value = 1;
+    else
+        ctx->r[r0].value = 0;
+}
+
+void geFunction(struct VMContext* ctx, const uint32_t instr)
+{
+    const uint8_t r0 = EXTRACT_B1(instr);
+    const uint8_t r1 = EXTRACT_B2(instr);
+    const uint8_t r2 = EXTRACT_B3(instr);
+    if (ctx->r[r1].value >= ctx->r[r2].value)
+        ctx->r[r0].value = 1;
+    else
+        ctx->r[r0].value = 0;
+}
+
+void eqFunction(struct VMContext* ctx, const uint32_t instr)
+{
+    const uint8_t r0 = EXTRACT_B1(instr);
+    const uint8_t r1 = EXTRACT_B2(instr);
+    const uint8_t r2 = EXTRACT_B3(instr);
+    if (ctx->r[r1].value == ctx->r[r2].value)
+        ctx->r[r0].value = 1;
+    else
+        ctx->r[r0].value = 0;
+}
+
 // Defers decoding of register args to the called function.
 // dispatch :: VMContext -> uint32_t -> Effect()
 void dispatch(struct VMContext* ctx, const uint32_t instr) {
