@@ -38,6 +38,8 @@ typedef struct VMContext {
     uint32_t numFuns;
     Reg* r;           // Ptr to register array.
     FunPtr* funtable; // Ptr to a funptr table.
+    bool is_running;  // halt check value.
+    void* heap;       // data section base address.
 } VMContext;
 
 
@@ -59,7 +61,7 @@ static FunPtr mvm_function_table[MVM_NUM_FUNS];
 
 //---------------------------------------------------------
 // FUNCTIONS:
-
+void haltFunction(struct VMContext* ctx, __attribute__((unused)) const uint32_t instr);
 
 // Selects and executes an opcode function from the function pointer table.
 // Passes the entire bytecode instruction as the argument.

@@ -4,11 +4,16 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <stdbool.h>
+#include <stdlib.h>
 #include "minivm.h"
-
 
 //---------------------------------------------------------
 // FUNCTION IMPLEMENTATIONS:
+void haltFunction(struct VMContext* ctx, __attribute__((unused)) const uint32_t instr)
+{
+    ctx->is_running = false;
+}
 
 
 // Defers decoding of register args to the called function.
@@ -26,6 +31,8 @@ void initVMContext(struct VMContext* ctx, const uint32_t numRegs, const uint32_t
     ctx->numFuns    = numFuns;
     ctx->r          = registers;
     ctx->funtable   = funtable;
+    ctx->is_running = true;
+    ctx->heap       = NULL;
 }
 
 

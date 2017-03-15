@@ -9,9 +9,6 @@
 #define NUM_REGS   (256)
 #define NUM_FUNCS  (256)
 
-// Global variable that indicates if the process is running.
-static bool is_running = true;
-
 void usageExit() {
     // TODO: show usage
     exit(1);
@@ -24,7 +21,7 @@ void initFuncs(FunPtr *f, uint32_t cnt) {
     }
 
     // TODO: initialize function pointers
-    // f[0x00] = halt;
+    f[0x00] = haltFunction;
     // f[0x10] = load;
 }
 
@@ -61,7 +58,7 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    while (is_running) {
+    while (vm.is_running) {
         // TODO: Read 4-byte bytecode, and set the pc accordingly
         stepVMContext(&vm, &pc);
     }
