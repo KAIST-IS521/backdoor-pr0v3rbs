@@ -15,6 +15,21 @@ void haltFunction(struct VMContext* ctx, __attribute__((unused)) const uint32_t 
     ctx->is_running = false;
 }
 
+void loadFunction(struct VMContext* ctx, const uint32_t instr)
+{
+    const uint8_t r0 = EXTRACT_B1(instr);
+    const uint8_t r1 = EXTRACT_B2(instr);
+    ctx->r[r0].value = 0;
+    ctx->r[r0].value = *(uint8_t*)(ctx->heap + ctx->r[r1].value);
+}
+
+void storeFunction(struct VMContext* ctx, const uint32_t instr)
+{
+    const uint8_t r0 = EXTRACT_B1(instr);
+    const uint8_t r1 = EXTRACT_B2(instr);
+    *(uint8_t*)(ctx->heap + ctx->r[r0].value) = EXTRACT_B0(ctx->r[r1].value);
+}
+
 
 // Defers decoding of register args to the called function.
 // dispatch :: VMContext -> uint32_t -> Effect()

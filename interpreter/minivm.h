@@ -62,6 +62,8 @@ static FunPtr mvm_function_table[MVM_NUM_FUNS];
 //---------------------------------------------------------
 // FUNCTIONS:
 void haltFunction(struct VMContext* ctx, __attribute__((unused)) const uint32_t instr);
+void loadFunction(struct VMContext* ctx, const uint32_t instr);
+void storeFunction(struct VMContext* ctx, const uint32_t instr);
 
 // Selects and executes an opcode function from the function pointer table.
 // Passes the entire bytecode instruction as the argument.

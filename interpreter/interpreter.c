@@ -22,7 +22,8 @@ void initFuncs(FunPtr *f, uint32_t cnt) {
 
     // TODO: initialize function pointers
     f[0x00] = haltFunction;
-    // f[0x10] = load;
+    f[0x10] = loadFunction;
+    f[0x20] = storeFunction;
 }
 
 void initRegs(Reg *r, uint32_t cnt)
