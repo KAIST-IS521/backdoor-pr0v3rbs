@@ -84,14 +84,17 @@ int main(int argc, char** argv) {
 
     while (vm.is_running) {
         // TODO: Read 4-byte bytecode, and set the pc accordingly
+
+        if (pc - vm.code >= vm.instr_num)
+        {
+            puts("\n*****error*****");
+            printf("No instuction(%ld)\n", (long unsigned int)(pc - vm.code));
+            exit(1);
+        }
+
         stepVMContext(&vm, &pc);
         if (vm.jmp_flag)
         {
-            if (vm.jmp_value >= vm.instr_num)
-            {
-                printf("illegal instruction pointer, in instuction(%ld)\n", (long unsigned int)(pc - vm.code) - 1);
-                exit(-1);
-            }
             vm.jmp_flag = false;
             pc = vm.code + vm.jmp_value;
         }
