@@ -10,7 +10,7 @@
 #define NUM_FUNCS  (256)
 
 void usageExit() {
-    // TODO: show usage
+    printf("usage: interpreter <bytecode-file>\n");
     exit(1);
 }
 
