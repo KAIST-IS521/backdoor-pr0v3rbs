@@ -1,0 +1,71 @@
+; src = test.mini
+puti  r10, 0
+puti  r1 , 1
+puti  r0 , 'P'
+store r10, r0
+add   r10, r10, r1
+puti  r0 , 'a'
+store r10, r0
+add   r10, r10, r1
+puti  r0 , 's'
+store r10, r0
+load  r5 , r10
+add   r10, r10, r1
+store r10, r5
+add   r10, r10, r1
+puti  r0 , 0
+store r10, r0
+puti  r10, 0
+
+puti r0, 0
+puti r1, 0
+puti r2, 1
+sub r0, r0, r2
+; r0 = 0xffffffff, r1 = 0x00
+gt r5, r0, r1
+ite r5, 24, 23
+halt
+
+add r0, r0, r2
+; r0 = 0x00, r1 = 0x00
+gt r5, r0, r1
+ite r5, 27, 28
+halt
+
+add r1, r1, r2
+; r0 = 0x00, r1 = 0x01
+gt r5, r0, r1
+ite r5, 31, 32
+halt
+; r0 = 0x00, r1 = 0x01
+ge r5, r0, r1
+ite r5, 34, 35
+halt
+; r0 = 0x00, r1 = 0x00
+sub r1, r1, r2
+ge r5, r0, r1
+ite r5, 39, 38
+halt
+; r0 = 0xffffffff, r1 = 0x00
+sub r0, r0, r2
+ge r5, r0, r1
+ite r5, 43, 42
+halt
+
+add r0, r0, r2
+eq r5, r0, r1
+ite r5, 47, 46
+halt
+puti r2, 0x80
+add r1, r2, r2
+eq r5, r0, r1
+ite r5, 51, 52
+halt
+
+puti r0, 10
+gets r0
+puts r10
+puts r0
+jump 58
+jump 56
+halt
