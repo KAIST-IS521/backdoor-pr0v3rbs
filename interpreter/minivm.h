@@ -83,7 +83,7 @@ void getsFunction(struct VMContext* ctx, const uint32_t instr);
 // Selects and executes an opcode function from the function pointer table.
 // Passes the entire bytecode instruction as the argument.
 // dispatch :: VMContext -> uint32_t -> Effect()
-void dispatch(struct VMContext* ctx, const uint32_t instr);
+bool dispatch(struct VMContext* ctx, const uint32_t instr);
 
 // Initializes a VMContext in-place.
 // initVMContext :: VMContext -> uint32_t -> uint32_t -> [Reg] -> [FunPtr] -> Effect()

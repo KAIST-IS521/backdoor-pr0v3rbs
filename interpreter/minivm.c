@@ -142,9 +142,16 @@ void getsFunction(struct VMContext* ctx, const uint32_t instr)
 
 // Defers decoding of register args to the called function.
 // dispatch :: VMContext -> uint32_t -> Effect()
-void dispatch(struct VMContext* ctx, const uint32_t instr) {
+bool dispatch(struct VMContext* ctx, const uint32_t instr) {
     const uint8_t i = EXTRACT_B0(instr);
+    if ((*ctx->funtable[i]) == NULL)
+    {
+        puts("\n*****error*****");
+	printf("unknown opcode number(0x%x) ", i);
+        return false;
+    }
     (*ctx->funtable[i])(ctx, instr);
+    return true;
 }
 
 
@@ -171,7 +178,11 @@ void stepVMContext(struct VMContext* ctx, uint32_t** pc) {
     uint32_t instr = **pc;
 
     // Dispatch to an opcode-handler.
-    dispatch(ctx, instr);
+    if (dispatch(ctx, instr) == false)
+    {
+        printf("on %ld instruction\n", *pc - ctx->code);
+        exit(1);
+    }
 
     // Increment to next instruction.
     (*pc)++;
