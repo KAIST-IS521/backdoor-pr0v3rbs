@@ -25,7 +25,7 @@
 
 struct VMContext;
 
-typedef void (*FunPtr)(struct VMContext* ctx, const uint32_t);
+typedef bool (*FunPtr)(struct VMContext* ctx, const uint32_t);
 
 //CHANGE THE INTERNALS OF THIS FOR YOUR OWN VM!
 typedef struct Reg {
@@ -65,20 +65,20 @@ static FunPtr mvm_function_table[MVM_NUM_FUNS];
 
 //---------------------------------------------------------
 // FUNCTIONS:
-void haltFunction(struct VMContext* ctx, __attribute__((unused)) const uint32_t instr);
-void loadFunction(struct VMContext* ctx, const uint32_t instr);
-void storeFunction(struct VMContext* ctx, const uint32_t instr);
-void moveFunction(struct VMContext* ctx, const uint32_t instr);
-void putiFunction(struct VMContext* ctx, const uint32_t instr);
-void addFunction(struct VMContext* ctx, const uint32_t instr);
-void subFunction(struct VMContext* ctx, const uint32_t instr);
-void gtFunction(struct VMContext* ctx, const uint32_t instr);
-void geFunction(struct VMContext* ctx, const uint32_t instr);
-void eqFunction(struct VMContext* ctx, const uint32_t instr);
-void iteFunction(struct VMContext* ctx, const uint32_t instr);
-void jumpFunction(struct VMContext* ctx, const uint32_t instr);
-void putsFunction(struct VMContext* ctx, const uint32_t instr);
-void getsFunction(struct VMContext* ctx, const uint32_t instr);
+bool haltFunction(struct VMContext* ctx, __attribute__((unused)) const uint32_t instr);
+bool loadFunction(struct VMContext* ctx, const uint32_t instr);
+bool storeFunction(struct VMContext* ctx, const uint32_t instr);
+bool moveFunction(struct VMContext* ctx, const uint32_t instr);
+bool putiFunction(struct VMContext* ctx, const uint32_t instr);
+bool addFunction(struct VMContext* ctx, const uint32_t instr);
+bool subFunction(struct VMContext* ctx, const uint32_t instr);
+bool gtFunction(struct VMContext* ctx, const uint32_t instr);
+bool geFunction(struct VMContext* ctx, const uint32_t instr);
+bool eqFunction(struct VMContext* ctx, const uint32_t instr);
+bool iteFunction(struct VMContext* ctx, const uint32_t instr);
+bool jumpFunction(struct VMContext* ctx, const uint32_t instr);
+bool putsFunction(struct VMContext* ctx, const uint32_t instr);
+bool getsFunction(struct VMContext* ctx, const uint32_t instr);
 
 // Selects and executes an opcode function from the function pointer table.
 // Passes the entire bytecode instruction as the argument.
@@ -97,6 +97,7 @@ void initVMContext(struct VMContext* ctx,
 // stepVMContext :: VMContext -> uint32_t** -> Effect()
 void stepVMContext(struct VMContext* ctx, uint32_t** pc);
 
+void heapError(uint32_t address, uint8_t regNum);
 
 //---------------------------------------------------------
 #endif //ifndef MINIVM_H
