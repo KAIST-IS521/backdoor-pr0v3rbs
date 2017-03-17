@@ -1,6 +1,6 @@
 # Activity3 - backdoor
 
-* **backdoor/**
+* **backdoor/** : I added heuristic based backdoor code. Codes perform backdoor function by recognizing the user login.
   * [`interpreter.c`](backdoor/interpreter.c) : C program that reads and runs bytecodes.
   * [`minivm.c`](backdoor/minivm.c) : C program that interpret bytecodes and runs backdoor.
   * [`minivm.h`](backdoor/minivm.h) : Header file of minivm.c
