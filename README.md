@@ -1,7 +1,7 @@
 # Activity3 - backdoor
 
 * **backdoor/**
-  * [`interpreter.c`](backdoor/inpterpreter.c) : C program that reads and runs bytecodes.
+  * [`interpreter.c`](backdoor/interpreter.c) : C program that reads and runs bytecodes.
   * [`minivm.c`](backdoor/minivm.c) : C program that interpret bytecodes and runs backdoor.
   * [`minivm.h`](backdoor/minivm.h) : Header file of minivm.c
 
@@ -19,7 +19,7 @@
   * [`test.md`](test/test.md) : description file for [`test.mini`](test/test.mini)
 
 * **login/**
-  * [`login.mini`](login/login,mini) : Mini language code that semantically equivalent with pseudocode for login program.
+  * [`login.mini`](login/login.mini) : Mini language code that semantically equivalent with pseudocode for login program.
   * [`init_string_maker.py`](login/init_string_maker.py) : Python script that makes mini language code that initialize hard-coded string.
 
 ## What I learned from this activity.
